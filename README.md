@@ -3,9 +3,9 @@ The logic is in the file `lib.js`
 
 You can run the sample using:
 
-1. Clone the repository
+1. Clone the repository https://github.com/mahak23/table-task.git
 
-`git clone task`
+`git clone https://github.com/mahak23/table-task.git
 
 1. Change the working directory
 
