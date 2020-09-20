@@ -9,7 +9,7 @@ You can run the sample using:
 
 1. Change the working directory
 
-`cd task`
+`cd table-task`
 
 1. Run the following command
 
