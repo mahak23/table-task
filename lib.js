@@ -1,6 +1,8 @@
 const { Op } = require("sequelize");
 
 async function updateData(sequelize, KardexModel, productCode, month, year, updatePrice = true) {
+    const transaction = await sequelize.transaction();
+
     let fetchedData = await KardexModel.findAll({
         where: {
             [Op.and]: [
@@ -11,7 +13,9 @@ async function updateData(sequelize, KardexModel, productCode, month, year, upda
         },
         order: [
             ['ordenArticulo', 'asc']
-        ]
+        ],
+        transaction: transaction,
+        lock: transaction.LOCK.UPDATE
     });
 
     let uniqueOrders = [];
@@ -19,8 +23,6 @@ async function updateData(sequelize, KardexModel, productCode, month, year, upda
     let saldoKgArticulo, saldoRollosArticulo, saldoPrecioArticulo, costIncrease, costDecrease, previousCost, index;
 
     if (totalRecords) {
-        const transaction = await sequelize.transaction();
-
         try {
             for (index = 0; index < totalRecords; index++) {
                 let record = fetchedData[index];
@@ -94,15 +96,14 @@ async function updateData(sequelize, KardexModel, productCode, month, year, upda
                     transaction: transaction
                 });
             }
-
-            await transaction.commit();
-
-            return true;
         } catch (error) {
             await transaction.rollback();
             console.error(error);
             throw error;
         }
+
+        await transaction.commit();
+        return true;
     }
     throw "No records fetched from database!"
 }
