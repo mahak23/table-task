@@ -101,11 +101,10 @@ async function updateData(sequelize, KardexModel, productCode, month, year, upda
             console.error(error);
             throw error;
         }
-
-        await transaction.commit();
-        return true;
     }
-    throw "No records fetched from database!"
+
+    await transaction.commit();
+    return true;
 }
 
 module.exports = {
